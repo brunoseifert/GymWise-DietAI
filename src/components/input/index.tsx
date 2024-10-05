@@ -36,10 +36,12 @@ export default function Input({
             onBlur={onBlur}
             value={value}
             onChangeText={onChange}
-            className="bg-secondaryBlack border-[1px] border-grayOne rounded-xl text-white placeholder:text-grayThree px-4 py-2"
+            keyboardType={keyboardType}
+            className="bg-grayOne border-[1px] border-grayTwo rounded-xl text-white placeholder:text-grayThree px-4 py-3"
           />
         )}
       />
+      {error && <Text className="text-Red">{error}</Text>}
     </View>
   );
 }
