@@ -2,10 +2,11 @@ import Header from "@/src/components/header";
 import Input from "@/src/components/input";
 import { Text, View, ScrollView, Pressable } from "react-native";
 
-import Constants from "expo-constants";
+
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { router } from "expo-router";
 
 const schema = z.object({
   name: z.string().min(1, { message: "o nome é obrigatório" }),
@@ -16,7 +17,7 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-const statusBarHeight = Constants.statusBarHeight;
+
 
 export default function Step() {
   const {
@@ -27,11 +28,14 @@ export default function Step() {
     resolver: zodResolver(schema),
   });
 
+  function handleCreate(data: FormData){
+    console.log(data)
+    router.push('/create')
+  }
+
   return (
     <View className="bg-secondaryBlack h-full">
-      <View style={{ marginTop: statusBarHeight + 8 }}>
         <Header step="Passo 1" title="Vamos começar" />
-      </View>
       <ScrollView className="px-6 mt-2">
         <Text className="text-white text-xl mt-8 mb-4">Nome:</Text>
         <Input
@@ -46,7 +50,7 @@ export default function Step() {
           name="weight"
           control={control}
           placeholder="Ex: 75"
-          error={errors.name?.message}
+          error={errors.weight?.message}
           keyboardType="numeric"
         />
         <Text className="text-white text-xl mt-6 mb-4">Sua altura:</Text>
@@ -54,7 +58,7 @@ export default function Step() {
           name="height"
           control={control}
           placeholder="Ex: 1.90"
-          error={errors.name?.message}
+          error={errors.height?.message}
           keyboardType="numeric"
         />
         <Text className="text-white text-xl mt-6 mb-4">Sua idade:</Text>
@@ -62,11 +66,11 @@ export default function Step() {
           name="age"
           control={control}
           placeholder="Ex: 25"
-          error={errors.name?.message}
+          error={errors.age?.message}
           keyboardType="numeric"
         />
 
-        <Pressable className="bg-primaryPurple mt-8 rounded-2xl p-4 w-full">
+        <Pressable onPress={handleSubmit(handleCreate)} className="bg-primaryPurple mt-8 rounded-2xl p-4 w-full">
           <Text className="text-xl text-white text-center">Avançar</Text>
         </Pressable>
       </ScrollView>
