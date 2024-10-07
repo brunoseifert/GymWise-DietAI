@@ -1,9 +1,10 @@
 import Header from "@/src/components/header";
 import Select from "../../components/input/select";
-import { View, Text } from "react-native";
+import { View, Text, ScrollView, Pressable } from "react-native";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { userDataStore } from "@/store/data";
 
 const schema = z.object({
   gender: z.string().min(1, { message: "o sexo é obrigatório" }),
@@ -22,15 +23,50 @@ export default function Create() {
     resolver: zodResolver(schema),
   });
 
+  const setPageTwo = userDataStore((state) => state.setPageTwo);
+
   const genderOptions = [
     { label: "Masculino", value: "masculino" },
     { label: "Feminino", value: "feminino" },
   ];
 
+  const levelOptions = [
+    {
+      label: "Sedentário (pouca ou nenhuma atividade física",
+      value: "Sedentário",
+    },
+    {
+      label: "Levemente ativo (exercícios 1 a 3 vezes na semana)",
+      value: "Levemente ativo (exercícios 1 a 3 vezes na semana)",
+    },
+    {
+      label: "Moderadamente ativo (exercícios 3 a 5 vezes na semana) ",
+      value: "Moderadamente ativo (exercícios 3 a 5 vezes na semana)",
+    },
+    {
+      label: "Altamente ativo (exercícios 5 a 7 vezes na semana) ",
+      value: "Altamente ativo (exercícios 5 a 7 vezes na semana)",
+    },
+  ];
+
+  const objectiveOptions = [
+    { label: "Emagrecimento", value: "emagrecimento" },
+    { label: "Definição", value: "definicao" },
+    { label: "Hipertrofia", value: "hipertrofia" },
+  ];
+
+  function handleCreate(data: FormData) {
+    setPageTwo({
+      gender: data.gender,
+      level: data.level,
+      objective: data.objective,
+    });
+  }
+
   return (
     <View className="bg-secondaryBlack h-full">
       <Header step="Passo 2" title="Finalizando dieta" />
-      <View className="px-4">
+      <ScrollView className="px-4">
         <Text className="text-white text-xl mt-8 mb-4">Sexo:</Text>
         <Select
           name="gender"
@@ -39,7 +75,34 @@ export default function Create() {
           error={errors.gender?.message}
           options={genderOptions}
         />
-      </View>
+        <Text className="text-white text-xl mt-8 mb-4">
+          Selecione nível de atividade física:
+        </Text>
+        <Select
+          name="level"
+          control={control}
+          placeholder="Selecione o seu nível..."
+          error={errors.level?.message}
+          options={levelOptions}
+        />
+        <Text className="text-white text-xl mt-8 mb-4">
+          Selecione seu objetivo:
+        </Text>
+        <Select
+          name="objective"
+          control={control}
+          placeholder="Selecione o seu objetivo..."
+          error={errors.objective?.message}
+          options={objectiveOptions}
+        />
+
+        <Pressable
+          onPress={handleSubmit(handleCreate)}
+          className="bg-primaryPurple mt-8 rounded-2xl p-4 w-full"
+        >
+          <Text className="text-xl text-white text-center">Gerar Dieta</Text>
+        </Pressable>
+      </ScrollView>
     </View>
   );
 }
