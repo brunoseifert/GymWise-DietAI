@@ -2,11 +2,11 @@ import Header from "@/src/components/header";
 import Input from "@/src/components/input";
 import { Text, View, ScrollView, Pressable } from "react-native";
 
-
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { router } from "expo-router";
+import { userDataStore } from "@/store/data";
 
 const schema = z.object({
   name: z.string().min(1, { message: "o nome é obrigatório" }),
@@ -17,8 +17,6 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-
-
 export default function Step() {
   const {
     control,
@@ -28,14 +26,22 @@ export default function Step() {
     resolver: zodResolver(schema),
   });
 
-  function handleCreate(data: FormData){
-    console.log(data)
-    router.push('/create')
+  const setPageOne = userDataStore((state) => state.setPageOne);
+
+  function handleCreate(data: FormData) {
+    setPageOne({
+      name: data.name,
+      age: data.age,
+      height: data.height,
+      weight: data.weight,
+    });
+
+    router.push("/create");
   }
 
   return (
     <View className="bg-secondaryBlack h-full">
-        <Header step="Passo 1" title="Vamos começar" />
+      <Header step="Passo 1" title="Vamos começar" />
       <ScrollView className="px-6 mt-2">
         <Text className="text-white text-xl mt-8 mb-4">Nome:</Text>
         <Input
@@ -70,7 +76,10 @@ export default function Step() {
           keyboardType="numeric"
         />
 
-        <Pressable onPress={handleSubmit(handleCreate)} className="bg-primaryPurple mt-8 rounded-2xl p-4 w-full">
+        <Pressable
+          onPress={handleSubmit(handleCreate)}
+          className="bg-primaryPurple mt-8 rounded-2xl p-4 w-full"
+        >
           <Text className="text-xl text-white text-center">Avançar</Text>
         </Pressable>
       </ScrollView>
