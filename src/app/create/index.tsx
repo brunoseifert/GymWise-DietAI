@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { userDataStore } from "@/store/data";
+import { router } from "expo-router";
 
 const schema = z.object({
   gender: z.string().min(1, { message: "o sexo é obrigatório" }),
@@ -61,6 +62,8 @@ export default function Create() {
       level: data.level,
       objective: data.objective,
     });
+
+    router.push("/nutrition");
   }
 
   return (
