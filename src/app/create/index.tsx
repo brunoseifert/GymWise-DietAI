@@ -51,9 +51,9 @@ export default function Create() {
   ];
 
   const objectiveOptions = [
-    { label: "Emagrecimento", value: "emagrecimento" },
-    { label: "Definição", value: "definicao" },
-    { label: "Hipertrofia", value: "hipertrofia" },
+    { label: "Emagrecimento", value: "Emagrecimento" },
+    { label: "Definição", value: "Definição" },
+    { label: "Hipertrofia", value: "Hipertrofia" },
   ];
 
   function handleCreate(data: FormData) {
